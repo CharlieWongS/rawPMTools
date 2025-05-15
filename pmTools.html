@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magical Link Converter</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 40px;
+            max-width: 90%;
+            background-color: #f0e6cc;
+            color: #2c3e50;
+<!--            background-image: url();-->
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        h1 {
+            color: #740001;
+            text-align: center;
+            font-family: 'Harry P', fantasy;
+            text-shadow: 2px 2px 4px #d3a625;
+            font-size: 2.5em;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #5d5d5d;
+        }
+        textarea, pre {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #d3a625;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            margin: 10px 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #740001;
+            color: #d3a625;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #5a0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #d3a625;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #d3a625;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .wand-icon {
+            font-size: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Henny+Penny&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>✧ Magical Link Converter ✧</h1>
+
+        <label for="inputArea">Paste Your Muggle Links (one per line):</label>
+        <textarea id="inputArea" placeholder="https://hogwarts.edu/potions/textbook.pdf\nhttps://diagonalley.com/spells/manual.txt"></textarea>
+
+        <div>
+            <button onclick="convertToUAT()"><span class="wand-icon">⚡</span>UAT Conversion Spell</button>
+            <button onclick="convertToCmd()"><span class="wand-icon">✨</span>Download Charm</button>
+            <button onclick="copyToClipboard()"><span class="wand-icon">📜</span>Copy to Scroll</button>
+        </div>
+
+        <label for="outputArea">Magical Output (read-only by Ministry decree):</label>
+        <pre id="outputArea" readonly></pre>
+    </div>
+
+    <script>
+        function convertToUAT() {
+            const input = document.getElementById('inputArea').value.split('\n');
+            const output = input.map(link => {
+                if (link.startsWith('https://')) {
+                    return link.replace('https://', 'https://uat-');
+                }
+                return link;
+            }).join('\n');
+            document.getElementById('outputArea').textContent = output;
+            playMagicSound();
+        }
+
+        function convertToCmd() {
+            const input = document.getElementById('inputArea').value.split('\n');
+            const output = input.map(link => {
+                try {
+                    const url = new URL(link);
+                    const path = url.pathname;
+                    const cmd = `accio "${link}" -O --create-dirs -o .${path}`;
+                    return cmd;
+                } catch (e) {
+                    return `# Invalid Spell URL: ${link}`;
+                }
+            }).join('\n');
+            document.getElementById('outputArea').textContent = output;
+            playMagicSound();
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('outputArea').textContent;
+            navigator.clipboard.writeText(output).then(() => {
+                showToast('Copied to magical scroll!');
+            }).catch(err => {
+                showToast('Copy spell failed: ' + err);
+            });
+        }
+
+        function playMagicSound() {
+            // In a real implementation, you might play a sound effect here
+            console.log("Magic sound effect!");
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.backgroundColor = '#740001';
+            toast.style.color = '#d3a625';
+            toast.style.padding = '10px 20px';
+            toast.style.borderRadius = '5px';
+            toast.style.zIndex = '1000';
+            toast.style.boxShadow = '0 0 10px #d3a625';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'opacity 1s';
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 1000);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
